@@ -37,20 +37,20 @@
       from { opacity: 0; transform: scale(0.9); }
       to { opacity: 1; transform: scale(1); }
     }
-    #close-alert-btn {
-  position: relative;
+   #close-alert-btn {
+  position: absolute;
   top: 10px;
-  right: 100%;
+  right: 10px;
   background: red;
   color: white;
   border: none;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   border-radius: 50%;
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   cursor: pointer;
-  z-index: 10000;
+  z-index: 10;
 }
 
   `;
