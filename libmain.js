@@ -17,7 +17,7 @@
     #custom-alert-box {
       background: #000;
       padding: 10px;
-      border-radius: 12px;
+      border-radius: 4px;
       max-width: 90vw;
       box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
       animation: fadeIn 0.4s ease;
