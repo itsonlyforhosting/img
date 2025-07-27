@@ -33,6 +33,22 @@
       from { opacity: 0; transform: scale(0.9); }
       to { opacity: 1; transform: scale(1); }
     }
+    #close-alert-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: red;
+  color: white;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  z-index: 10000;
+}
+
   `;
   document.head.appendChild(style);
 
@@ -41,10 +57,15 @@
   modal.id = "custom-alert-overlay";
   modal.innerHTML = `
     <div id="custom-alert-box">
+     <button id="close-alert-btn">&times;</button>
       <img src="https://itsonlyforhosting.github.io/img/img10.jpeg" alt="Custom Banner" />
     </div>
   `;
   document.body.appendChild(modal);
+  document.getElementById("close-alert-btn").addEventListener("click", function() {
+  document.getElementById("custom-alert-overlay").remove();
+});
+
 
   // Auto-close after 5 seconds (optional)
   setTimeout(() => {
