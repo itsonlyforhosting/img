@@ -34,7 +34,7 @@
       to { opacity: 1; transform: scale(1); }
     }
     #close-alert-btn {
-  position: absolute;
+  position: relative;
   top: 10px;
   right: 15px;
   background: red;
