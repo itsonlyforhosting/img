@@ -14,13 +14,17 @@
       z-index: 9999;
     }
 
-    #custom-alert-box {
-      background: #000;
-      padding: 10px;
-      border-radius: 4px;
-      max-width: 90vw;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-      animation: fadeIn 0.4s ease;
+    
+   #custom-alert-box {
+    position: relative;
+    width: 90%;
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    padding: 0;
+    border-radius: 4px;
+    overflow: hidden;
+
     }
 
     #custom-alert-box img {
