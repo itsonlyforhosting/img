@@ -36,7 +36,7 @@
     #close-alert-btn {
   position: relative;
   top: 10px;
-  right: 15px;
+  right: 100%;
   background: red;
   color: white;
   border: none;
