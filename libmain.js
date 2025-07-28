@@ -1,5 +1,5 @@
 
  
-localStorage.setItem("elsurviCommand", "triggerAlert");
+
 
 
