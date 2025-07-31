@@ -1,2 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NCC Enrollment Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    form {
+      max-width: 700px;
+      margin: auto;
+      background: #fff;
+      padding: 25px 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 8px 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+    
+    .image-preview-container {
+      display: flex;
+      margin-top: 10px;
+    }
+
+    #photo-preview {
+      width: 140px;
+      height: 140px;
+      object-fit: cover;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      display: none;
+    }
+
+    #camera-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-bottom: 15px;
+      justify-content: space-between;
+    }
+
+    #camera-stream {
+      width: 180px;
+      height: 140px;
+      background-image: url(https://image.winudf.com/v2/user/admin/YWRtaW5fNWFhYzM2Mjg0OTc1OC5wbmdfMTcxODA5MTYzMTYzNg/icon.png?w=140&fakeurl=1);
+      background-repeat: no-repeat;
+      background-position-y: center;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      margin-top: 10px;
+      position: relative;
+      color: black;
+    }
+
+    .imgupload {
+      width: 50%;
+      height: 70%;
+      margin-top: 20px;
+      margin-right: 10px;
+    }
+
+    .photosection {
+      display: flex;
+      width: 100%;
+      padding: 4px 5px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #stopcam {
+      margin-left: 10px;
+      background-color: #d32f2f;
+      color: white;
+    }
+
+    button:hover {
+      background-color: #125ca1;
+    }
+  </style>
+</head>
+<body>
+  
+  <h2>NCC Enrollment Form</h2>
+  <form id="nccForm">
+
+    <div id="camera-container">
+      <div class="preview">
+        <div class="image-preview-container">
+          <input type="hidden" id="captured-photo" name="captured_photo">
+          <img id="photo-preview" alt="Captured Image">
+        </div>
+      </div>
+      <div class="live-img">
+        <video id="camera-stream" autoplay></video>
+      </div>
+    </div>
+
+    <label>Photo Upload</label>
+    <div class="photosection">
+      <input class="imgupload" type="file" id="photo" name="photo" accept="image/*" onchange="previewPhoto(event)"> 
+      <button id="capture-btn" type="button" onclick="capturePhoto()">Capture Live</button>
+    </div>
+   
+    <label>Name</label>
+    <input type="text" name="name" required>
+
+    <label>Father Name</label>
+    <input type="text" name="fatherName" required>
+
+    <label>Gender</label>
+    <select name="gender">
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+      <option value="Other">Other</option>
+    </select>
+
+    <label>Date of Birth</label>
+    <input type="date" id="dob" name="dob" onchange="calculateAge()" required>
+
+    <label>Age</label>
+    <input type="number" id="age" name="age" readonly>
+
+    <label>Blood Group</label>
+    <input type="text" name="bloodGroup">
+
+    <label>Aadhar Number</label>
+    <input type="text" name="aadhar">
+
+    <label>Address</label>
+    <textarea name="address" rows="2"></textarea>
+
+    <label>College / University</label>
+    <input type="text" name="college">
+
+    <label>Bank Account Number</label>
+    <input type="text" name="accountNumber">
+
+    <label>Bank Name</label>
+    <input type="text" name="bankName">
+
+    <label>IFSC Code</label>
+    <input type="text" name="ifsc">
+
+    <label>Bank Address</label>
+    <textarea name="bankAddress" rows="2"></textarea>
+
+    <button type="submit">Submit</button>
+  </form>
+
+ <script>
+  function calculateAge() {
+  const dob = document.getElementById('dob').value;
+  if (dob) {
+    const birthYear = new Date(dob).getFullYear();
+    const currentYear = new Date().getFullYear();
+    const age = currentYear - birthYear;
+    document.getElementById('age').value = age;
+  }
+}
+
+  const form = document.getElementById("nccForm");
+  const scriptURL = "https://script.google.com/macros/s/AKfycbzDdz9vvUrvuom2_3sMQeSkQDl78OmUMP0NNlew1Cqo-Flu4R9Jlr-jTkm1Lg55GDU/exec"; 
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const photoInput = document.getElementById("photo");
+    let photoURL = "N/A";
+
+    if (photoInput.files[0]) {
+      // Upload to Cloudinary
+      const cloudName = "df4pigh4v";
+      const uploadPreset = "ncc_unsigned"; // Make sure this preset exists
+
+      const formData = new FormData();
+      formData.append("file", photoInput.files[0]);
+      formData.append("upload_preset", uploadPreset);
+
+      try {
+        const cloudinaryRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, {
+          method: "POST",
+          body: formData
+        });
+
+        const cloudinaryData = await cloudinaryRes.json();
+        photoURL = cloudinaryData.secure_url;
+      } catch (err) {
+        alert("Failed to upload photo: " + err.message);
+        return;
+      }
+    }
+
+    // Now send form + photoURL to Google Sheets
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    data.photoURL = photoURL;
+
+    try {
+      const res = await fetch(scriptURL, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const text = await res.text();
+      alert("Form submitted successfully!");
+      form.reset();
+      document.getElementById("photo-preview").style.display = "none";
+    } catch (err) {
+      alert("Error submitting form: " + err.message);
+    }
+  });
+
+    function previewPhoto(event) {
+      const reader = new FileReader();
+      reader.onload = function() {
+        const output = document.getElementById('photo-preview');
+        output.src = reader.result;
+        output.style.display = 'block'; // show the image
+        capturedInput.value = ''; // Clear captured photo input
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+ 
+    const video = document.getElementById('camera-stream');
+    const preview = document.getElementById('photo-preview');
+    const capturedInput = document.getElementById('captured-photo');
+    const captureBtn = document.getElementById('capture-btn');
+    let videoStream = null;
+
+    // Function to start the camera
+    function startCamera() {
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+          videoStream = stream;
+          video.srcObject = stream;
+          captureBtn.innerText = 'Capture Live';
+        })
+        .catch(err => {
+          console.error("Camera access error:", err);
+        });
+    }
+function resetFileInput() {
+    const oldInput = document.getElementById("photo");
+    const newInput = oldInput.cloneNode(true);
+    newInput.value = ""; // clear file
+    newInput.addEventListener("change", previewPhoto);
+    oldInput.parentNode.replaceChild(newInput, oldInput);
+}
+
+
+    // Function to capture photo or restart camera
+    function capturePhoto() {
+ if (!videoStream) {
+    startCamera();
+    captureBtn.innerText = 'Capture Live';
+
+    // ✅ Clear preview and captured input
+    preview.src = '';
+    preview.style.display = 'none';
+    capturedInput.value = '';
+
+    // ✅ Reset file input box completely
+    resetFileInput();
+    return;
+  }
+  const canvas = document.createElement('canvas');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  const context = canvas.getContext('2d');
+  context.drawImage(video, 0, 0, canvas.width, canvas.height);
+  
+  const imageData = canvas.toDataURL('image/png');
+  preview.src = imageData;
+  preview.style.display = 'block';
+  capturedInput.value = imageData;
+  // Stop camera
+  videoStream.getTracks().forEach(track => track.stop());
+  video.srcObject = null;
+  videoStream = null;
+  // Change button text
+ captureBtn.innerText = 'Capture Again';
+  // Reset the uploaded photo input
+  resetFileInput();// Clear the uploaded photo input
+}
+
+
+    // Start camera on load
+    startCamera();
+  </script>
+</body>
+</html>
 
 
