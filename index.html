@@ -192,61 +192,97 @@
     document.getElementById('age').value = age;
   }
 }
-
+  // Handle form submission
   const form = document.getElementById("nccForm");
-  const scriptURL = "https://script.google.com/macros/s/AKfycbzDdz9vvUrvuom2_3sMQeSkQDl78OmUMP0NNlew1Cqo-Flu4R9Jlr-jTkm1Lg55GDU/exec"; 
+  const scriptURL = "https://script.google.com/macros/s/AKfycbzSWGzx8ybAtVcyKyYBFZnzP36eXyfylcuVnFVbCyD5LMwwITmef5qPx9lQz7ekUw/exec"; // <-- paste your deployed script URL
+  const photoInput = document.getElementById("photo");
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-
+    alert("🟡 Form submission started...");
     const photoInput = document.getElementById("photo");
     let photoURL = "N/A";
 
-    if (photoInput.files[0]) {
-      // Upload to Cloudinary
-      const cloudName = "df4pigh4v";
-      const uploadPreset = "ncc_unsigned"; // Make sure this preset exists
+    // 🔸 Step 1: Upload image to Cloudinary if selected
+    if (photoInput.files.length > 0) {
+      alert("🟠 Photo selected. Uploading to Cloudinary...");
 
-      const formData = new FormData();
-      formData.append("file", photoInput.files[0]);
-      formData.append("upload_preset", uploadPreset);
+      const cloudName = "df4pigh4v";
+      const uploadPreset = "ncc_unsigned"; // Make sure unsigned preset exists in your Cloudinary
+
+      const imageForm = new FormData();
+      imageForm.append("file", photoInput.files[0]);
+      imageForm.append("upload_preset", uploadPreset);
 
       try {
-        const cloudinaryRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, {
+        const uploadResponse = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, {
           method: "POST",
-          body: formData
+          body: imageForm,
         });
 
-        const cloudinaryData = await cloudinaryRes.json();
-        photoURL = cloudinaryData.secure_url;
-      } catch (err) {
-        alert("Failed to upload photo: " + err.message);
+        const uploadResult = await uploadResponse.json();
+        alert("📸 Cloudinary raw response:\n" + JSON.stringify(uploadResult, null, 2));
+
+        if (!uploadResult.secure_url) {
+          alert("❌ Failed to get photo URL from Cloudinary.");
+          return;
+        }
+
+        photoURL = uploadResult.secure_url;
+        alert("✅ Photo uploaded successfully: " + photoURL);
+      } catch (error) {
+        alert("❌ Cloudinary Upload Error: " + error.message);
         return;
       }
+    } else {
+      alert("⚠️ No photo selected. Continuing without photo.");
     }
 
-    // Now send form + photoURL to Google Sheets
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-    data.photoURL = photoURL;
+    // Collect only needed fields
+    const data = {
+      name: form.elements["name"].value,
+      fatherName: form.elements["fatherName"].value,
+      gender: form.elements["gender"].value,
+      dob: form.elements["dob"].value,
+      age: form.elements["age"].value,
+      bloodGroup: form.elements["bloodGroup"].value,
+      aadhar: form.elements["aadhar"].value,
+      address: form.elements["address"].value,
+      college: form.elements["college"].value,
+      accountNumber: form.elements["accountNumber"].value,
+      bankName: form.elements["bankName"].value,
+      ifsc: form.elements["ifsc"].value,
+      bankAddress: form.elements["bankAddress"].value,
+      photoURL: photoURL
+    };
+
+    alert("📤 Sending this data:\n" + JSON.stringify(data, null, 2));
 
     try {
       const res = await fetch(scriptURL, {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-        },
       });
 
-      const text = await res.text();
-      alert("Form submitted successfully!");
-      form.reset();
-      document.getElementById("photo-preview").style.display = "none";
+      const responseText = await res.text();
+      alert("✅ Google Script responded:\n" + responseText);
+
+      if (res.ok) {
+        alert("🎉 Form submitted!");
+        form.reset();
+        document.getElementById("photo-preview").style.display = "none";
+      } else {
+        alert("❌ Script error:\n" + responseText);
+      }
     } catch (err) {
-      alert("Error submitting form: " + err.message);
+      alert("❌ Fetch error: " + err.message);
     }
   });
+
+
+
+
 
     function previewPhoto(event) {
       const reader = new FileReader();
@@ -327,5 +363,3 @@ function resetFileInput() {
   </script>
 </body>
 </html>
-
-
