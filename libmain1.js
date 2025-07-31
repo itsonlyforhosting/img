@@ -1,4 +1,4 @@
-/*
+
 (function() {
   // CSS create and append
   const style = document.createElement("style");
@@ -75,4 +75,4 @@
   setTimeout(() => {
     modal.remove();
   }, 5000);
-})();*/
+})();
