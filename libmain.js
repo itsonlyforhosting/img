@@ -1,5 +1,5 @@
 
  
-aletr('you are hacked')
+alert('you are hacked')
 
 
