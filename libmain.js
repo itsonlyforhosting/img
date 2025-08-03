@@ -62,7 +62,7 @@
   modal.innerHTML = `
     <div id="custom-alert-box">
      <button id="close-alert-btn">&times;</button>
-      <img src="https://itsonlyforhosting.github.io/img/img1000.jpg" alt="Custom Banner" />
+      <img src="https://itsonlyforhosting.github.io/img/img1000.jpeg" alt="Custom Banner" />
     </div>
   `;
   document.body.appendChild(modal);
