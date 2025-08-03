@@ -74,5 +74,5 @@
   // Auto-close after 5 seconds (optional)
   setTimeout(() => {
     modal.remove();
-  }, 5000);
+  }, 10000);
 })();
