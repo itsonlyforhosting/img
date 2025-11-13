@@ -1,4 +1,4 @@
-
+/*
 (function() {
   // CSS create and append
   const style = document.createElement("style");
@@ -76,5 +76,5 @@
     modal.remove();
   }, 10000);
 })();
-
+*/
 
