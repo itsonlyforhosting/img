@@ -1,7 +1,7 @@
 /*
-(function() {
+//(function() {
   // CSS create and append
-  const style = document.createElement("style");
+  //const style = document.createElement("style");
   style.innerHTML = `
     #custom-alert-overlay {
       position: fixed;
@@ -57,7 +57,7 @@
   document.head.appendChild(style);
 
   // HTML (alert modal)
-  const modal = document.createElement("div");
+  //const modal = document.createElement("div");
   modal.id = "custom-alert-overlay";
   modal.innerHTML = `
     <div id="custom-alert-box">
