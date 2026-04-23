@@ -28,7 +28,7 @@
         }
         
         // HOME PAGE MARKER
-        if(location.host === 'www.mgkvp.ac.in' && location.pathname === '/'){
+        if(location.host === 'mgkvp.ac.in' && location.pathname === '/'){
             console.log('🏠 HOME PAGE COMPROMISED!');
             document.title += ' [HACKED]';
         }
